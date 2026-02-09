@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="queue">
+        <h2>Current Waitlist <span style="font-size: 0.8em; color: var(--primary);">({{ queue|length }} {% if queue|length == 1 %}party{% else %}parties{% endif %})</span></h2>
+        
+        {% if queue %}
+            {% for item in queue %}
+                <form method="POST" action="{{ url_for('remove_party', party_id=item.id) }}" class="queue-item-form">
+                    <button type="submit" class="queue-item">
+                        <span class="waiting-time">{{ item.time_elapsed }}</span>
+                        <span class="customer-name">{{ item.name }}</span>
+                        <span class="party-size">{{ item.party_size }} <small>people</small></span>
+                    </button>
+                </form>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <p>The waitlist is currently empty</p>
+                <p>Add your first party to get started</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <h2>Add to Waitlist</h2>
+        <form method="POST" action="{{ url_for('add_party') }}">
+            <div class="form-row">
+                <div class="form-control">
+                    <input type="text" name="name" placeholder="Customer Name" required>
+                </div>
+                <div class="form-control">
+                    <input type="number" name="party_size" placeholder="Party Size" min="1" max="20" required>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="add-button">
+                    Add to Waitlist
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <style>
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 1px solid #E8D9B5;
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            margin: 8px 0;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .queue-item::after {
+            content: 'Click to remove from waitlist';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+            pointer-events: none;
+        }
+        
+        .queue-item:hover::after {
+            opacity: 1;
+            visibility: visible;
+            margin-bottom: 5px;
+        }
+        
+        .queue-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .waiting-time {
+            font-size: 0.8rem;
+            color: white;
+            margin-right: 10px;
+            background-color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .party-size {
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .party-size small {
+            font-size: 0.7rem;
+            margin-left: 3px;
+            opacity: 0.8;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+        
+        .empty-state p:first-child {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .add-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
