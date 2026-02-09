@@ -8,7 +8,7 @@ A modern, responsive web application for managing restaurant waitlists with real
 
 - Allows users to add and remove parties from the waitlist; records name and party size
 - Automatically calculates and displays the duration each party has been waiting
-- Estimates wait time for new parties based on rolling average of wait times and queue length
+- Estimates wait time for new parties based on rolling average
 
 
 ### Prerequisites

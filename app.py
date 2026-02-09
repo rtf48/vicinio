@@ -82,8 +82,7 @@ def calculate_average_wait_time():
 @app.route('/')
 def index():
     # Calculate current wait time based on average and number of parties
-    waiting_parties = [p for p in waitlist if p.status == 'waiting']
-    current_wait_time = average_wait_time * len(waiting_parties)
+    current_wait_time = average_wait_time
     return render_template('index.html', queue=[p.to_dict() for p in waitlist], current_wait_time=current_wait_time)
 
 @app.route('/add', methods=['POST'])
@@ -125,7 +124,7 @@ def remove_party(party_id):
             waiting_parties = [p for p in waitlist if p.status == 'waiting' and p.id != party_id]
             current_wait_times = [p.get_wait_duration() for p in waiting_parties]
             
-            all_times = recent_wait_times + current_wait_times
+            all_times = recent_wait_times
             if all_times:
                 average_wait_time = sum(all_times) / len(all_times)
             
